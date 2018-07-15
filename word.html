@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>word test</title>
+    <script src="word.js"></script>
+
+</head>
+<body>
+ <script type="text/javascript">
+     var theStr="广东省河南省 北京天津重庆上海浙江江苏省浙江省";
+     var theWords=theStr.toWords();
+     for(var i=0;i<theWords.length;i++){
+         var theWord=theWords[i];
+         console.log(theWord.word);
+     }
+ </script>
+</body>
+</html>
