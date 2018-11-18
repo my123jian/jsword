@@ -28,9 +28,11 @@
 	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 	map.addEventListener("zoomend",function(){
 		var theZoom=map.getZoom();
+		map.setCenter(new BMap.Point(113.275824,22.994826));
 		console.log(theZoom);
 		if(theZoom>=16){
 		map.setMapType(BMAP_PERSPECTIVE_MAP);
+			
 		}
 		else{
 		map.setMapType(BMAP_HYBRID_MAP);
