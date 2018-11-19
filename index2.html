@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html, .mapview {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+       
+
+        .current {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=uhUXo95zcpPPzkt8hxbB8URBe60heVA1"></script>
+    <title>地图展示</title>
+</head>
+<body>
+    <div id="allmap" class="mapview"></div>
+    
+</body>
+</html>
+<script type="text/javascript">   
+  
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    var theCurrentZoom = 1;
+    var theMapType = 0;
+    var theViewPoints = [];
+    var theCenterPoints = new BMap.Point(113.275824, 22.994826);
+    theViewPoints.push(theCenterPoints);
+    map.setViewport(theViewPoints);
+    map.centerAndZoom(theCenterPoints, theCurrentZoom);  // 初始化地图,设置中心点坐标和地图级别
+
+    theMapType = BMAP_NORMAL_MAP;
+    map.setMapType(theMapType);
+    //添加地图类型控件
+    /*map.addControl(new BMap.MapTypeControl({
+		mapTypes:[
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP,
+			BMAP_PERSPECTIVE_MAP
+        ]})); */
+    map.setCurrentCity("广州");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.addEventListener("zoomend", function () {
+        var theZoom = map.getZoom();
+        map.setCenter(new BMap.Point(113.275824, 22.994826));
+        console.log(theZoom);
+        if (theZoom >= 16) {
+            if (theMapType != BMAP_HYBRID_MAP) {
+                theMapType = BMAP_HYBRID_MAP;
+                map.setMapType(BMAP_HYBRID_MAP);
+
+            }
+        }
+        else {
+            if (theMapType != BMAP_NORMAL_MAP) {
+                theMapType = BMAP_NORMAL_MAP;
+                map.setMapType(BMAP_NORMAL_MAP);
+
+            }
+        }
+    });
+    //map.setMapType(BMAP_HYBRID_MAP);
+    var theMaxZoom = 20;
+
+    var theTimer = window.setInterval(function () {
+        //theCurrentZoom=map.getZoom();
+        if (theCurrentZoom >= theMaxZoom) {
+            window.clearInterval(theTimer);
+            return;
+        }
+        //map.zoomIn();
+        map.centerAndZoom(new BMap.Point(113.275824, 22.994826), theCurrentZoom++);
+
+    }, 1000);
+
+    var config = [
+           {
+               "featureType": "water",
+               "elementType": "all",
+               "stylers": {
+                   "color": "#021019"
+               }
+           },
+           {
+               "featureType": "highway",
+               "elementType": "geometry.fill",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "highway",
+               "elementType": "geometry.stroke",
+               "stylers": {
+                   "color": "#147a92"
+               }
+           },
+           {
+               "featureType": "arterial",
+               "elementType": "geometry.fill",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "arterial",
+               "elementType": "geometry.stroke",
+               "stylers": {
+                   "color": "#0b3d51"
+               }
+           },
+           {
+               "featureType": "local",
+               "elementType": "geometry",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "land",
+               "elementType": "all",
+               "stylers": {
+                   "color": "#08304b"
+               }
+           },
+           {
+               "featureType": "railway",
+               "elementType": "geometry.fill",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "railway",
+               "elementType": "geometry.stroke",
+               "stylers": {
+                   "color": "#08304b"
+               }
+           },
+           {
+               "featureType": "subway",
+               "elementType": "geometry",
+               "stylers": {
+                   "lightness": -70
+               }
+           },
+           {
+               "featureType": "building",
+               "elementType": "geometry.fill",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "all",
+               "elementType": "labels.text.fill",
+               "stylers": {
+                   "color": "#857f7f"
+               }
+           },
+           {
+               "featureType": "all",
+               "elementType": "labels.text.stroke",
+               "stylers": {
+                   "color": "#000000"
+               }
+           },
+           {
+               "featureType": "building",
+               "elementType": "geometry",
+               "stylers": {
+                   "color": "#022338"
+               }
+           },
+           {
+               "featureType": "green",
+               "elementType": "geometry",
+               "stylers": {
+                   "color": "#062032"
+               }
+           },
+           {
+               "featureType": "boundary",
+               "elementType": "all",
+               "stylers": {
+                   "color": "#1e1c1c"
+               }
+           },
+           {
+               "featureType": "manmade",
+               "elementType": "geometry",
+               "stylers": {
+                   "color": "#022338"
+               }
+           },
+           {
+               "featureType": "poi",
+               "elementType": "all",
+               "stylers": {
+                   "visibility": "off"
+               }
+           },
+           {
+               "featureType": "all",
+               "elementType": "labels.icon",
+               "stylers": {
+                   "visibility": "off"
+               }
+           },
+           {
+               "featureType": "all",
+               "elementType": "labels.text.fill",
+               "stylers": {
+                   "color": "#2da0c6",
+                   "visibility": "on"
+               }
+           }
+    ];
+    map.setMapStyle({ styleJson: config });
+
+</script>
