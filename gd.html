@@ -24,8 +24,8 @@
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>
     var map = Loca.create('container', {
-       // mapStyle: 'amap://styles/blue',
-        zoom: 5,
+       // mapStyle: 'amap://styles/darkblue',
+        zoom: 1,
         center: [113.275824, 22.994826],
         features: ['bg', 'road'],
         pitch: 50,
@@ -38,7 +38,7 @@
             var controlBar = new AMap.ControlBar();
             map.getMap().addControl(controlBar);
         });*/
-		var theMap=map.getMap();
+	var theMap=map.getMap();
 	var theMaxZoom=10;
 	var theCurrentZoom=1;
 	 var theTimer = window.setInterval(function () {
@@ -47,10 +47,10 @@
             window.clearInterval(theTimer);
             return;
         }
-		console.log(theZoomValue);
+	console.log(theZoomValue);
         //map.zoomIn();
         theMap.setZoom(theCurrentZoom++);
-    }, 300);
+    }, 500);
     });
 
     var layer = Loca.visualLayer({
