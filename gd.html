@@ -30,7 +30,7 @@
         features: ['bg', 'road','building','point'],
 	    showBuildingBlock:true,
 	    buildingAnimation:true,
-        pitch: 50,
+        pitch: 50
         // Loca 自 1.2.0 起 viewMode 模式默认为 3D，如需 2D 模式，请显示配置。
         // viewMode: '3D',
     });
@@ -41,7 +41,7 @@
             map.getMap().addControl(controlBar);
         });*/
 	var theMap=map.getMap();
-	var theMaxZoom=12;
+	var theMaxZoom=18;
 	var theCurrentZoom=1;
 	 var theTimer = window.setInterval(function () {
         var  theZoomValue=theMap.getZoom();
@@ -55,20 +55,20 @@
     }, 500);
     });
 
-    var layer = Loca.visualLayer({
+    /*var layer = Loca.visualLayer({
         container: map,
         type: 'point',
         shape: 'circle'
-    });
+    });*/
 
     /*layer.setData(citys, {
         lnglat: 'lnglat'
     });*/
 
-    layer.setOptions({
+    /*layer.setOptions({
         style: {
             // 支持动态回调，为每一个点设置半径
-            /*radius: function (obj) {
+            radius: function (obj) {
                 // 城市类型，0：省会直辖市，1：地级市，2：区县
                 var style = obj.value.style;
                 var r;
@@ -81,15 +81,15 @@
                 }
 
                 return r;
-            },*/
+            },
             //color: '#47aff7',
             //borderColor: '#c3faff',
             borderWidth: 1,
             opacity: 0.8
         }
-    });
+    });*/
 
-    layer.render();
+    //layer.render();
 	
 	
 
