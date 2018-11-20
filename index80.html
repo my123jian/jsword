@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>例子</title>
+    <style>
+        html,
+        body,
+        #container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="container" class="container">
+    </div>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.8&key=b70cedb6efd4b9dac0bebb4c67230db6"></script>
+    <script type="text/javascript">
+        var satellite = new AMap.TileLayer.Satellite();
+        //var roadNet = new AMap.TileLayer.RoadNet();
+        var building = new AMap.Buildings({
+            zooms: [16, 18],
+            zIndex: 10,
+            heightFactor: 2//2倍于默认高度，3D下有效
+        })
+        var theMap = new AMap.Map('container', {
+
+            pitch: 60,
+            //viewMode: '3D',// 地图模式
+            center: [113.275824, 22.994826],
+            features: ['bg', 'building'],
+            zoom: 7,
+            layers: [
+                    satellite,
+                    building
+                    //roadNet
+            ]
+        });
+        var theMaxZoom = 18;
+        var theCurrentZoom = 1;
+        /*var theTimer = window.setInterval(function () {
+                var  theZoomValue=theMap.getZoom();
+                if (theCurrentZoom >= theMaxZoom) {
+                    window.clearInterval(theTimer);
+                    return;
+                }
+            console.log(theZoomValue);
+                //map.zoomIn();
+                theMap.setZoom(theCurrentZoom++);
+            }, 500);*/
+
+
+        //AMap.plugin('AMap.DistrictSearch', function () {
+        //    // 创建行政区查询对象
+        //    var district = new AMap.DistrictSearch({
+        //        // 返回行政区边界坐标等具体信息
+        //        extensions: 'all',
+        //        // 设置查询行政区级别为 区
+        //        level: 'province'
+        //    })
+
+        //    district.search('广东省', function (status, result) {
+        //        // 获取朝阳区的边界信息
+        //        var bounds = result.districtList[0].boundaries
+        //        if (!bounds) {
+        //            console.log("未获取到数据!");
+        //            return;
+        //        }
+
+        //        var theBigBounds = null;
+        //        window.theMap = theMap;
+        //        for (var i = 0, l = bounds.length; i < l; i++) {
+
+        //            var theBound = bounds[i];
+        //            var polygon = {};
+        //            var polygon = new AMap.Polygon({
+        //                map: window.theMap,
+        //                strokeWeight: 1,
+        //                borderWeight: 200, // 线条宽度，默认为 1
+        //                path: theBound,
+        //                strokeOpacity: 1,
+        //                zIndex: 1,
+        //                fillOpacity: 0.5,
+        //                fillColor: '#0f0c21',
+        //                strokeColor: 'blue'
+        //            });
+
+        //            if (theBound.length >= 10000) {
+        //                theBigBounds = theBound;
+        //            }
+        //            //  polygons.push(polygon);
+
+        //        }
+        //       showLine(theBigBounds);
+
+        //    })
+        //});
+
+        var marker = new AMap.Marker({
+            position: new AMap.LngLat(113.275824, 22.994826),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            title: '广州南站'
+        });
+
+        //function showLine(thePaths) {
+        //    console.log("开始绘制线！");
+        //    if (!thePaths) {
+        //        console.log("未找到最大的轮廓");
+        //        return;
+        //    }
+        //    var theIndex = 1;
+        //    var thePoints = [];
+        //    thePoints.push(thePaths[0]);
+        //    console.log("开始执行");
+            
+        //    var theTimer = window.setInterval(function () {
+        //        console.log(theIndex);
+        //        thePoints.push(thePaths[theIndex]);
+        //        theIndex++;
+        //        if (theIndex<thePaths.length){
+        //            thePoints.push(thePaths[theIndex]);
+        //            theIndex++;
+        //        }           
+        //        if (theIndex >= thePaths.length) {
+        //            debugger;
+        //            window.clearInterval(theTimer);
+        //            if (thePoints.length > 0) {
+        //                var polyline = new AMap.Polyline({
+        //                    path: thePoints,
+        //                    map: window.theMap,
+        //                    borderWeight: 2, // 线条宽度，默认为 1
+        //                    strokeColor: 'red'//, // 线条颜色
+        //                    //lineJoin: 'round' // 折线拐点连接处样式
+        //                });
+        //                thePoints = [];
+        //            }
+        //            console.log("绘图结束！");
+        //            return;
+        //        }
+        //        if (thePoints.length > 10) {
+        //            //debugger;
+        //            var polyline = new AMap.Polyline({
+        //                path: thePoints,
+        //                map: window.theMap,
+        //                borderWeight: 2, // 线条宽度，默认为 1
+        //                strokeColor: 'red'//, // 线条颜色
+        //                //lineJoin: 'round' // 折线拐点连接处样式
+        //            });
+        //            var theLastPoint = thePoints[thePoints.length - 1];
+        //            thePoints = [];
+        //            thePoints.push(theLastPoint);
+                    
+        //            console.log("开始绘制线！");
+        //        }
+
+        //    }, 1);
+
+        
+
+        //}
+
+
+
+        // 将创建的点标记添加到已有的地图实例：
+        //theMap.add(marker);
+
+        //加载图层展示
+        //AMapUI.loadUI(['overlay/SimpleMarker'], function (SimpleMarker) {
+        //    //启动页面
+        //    initPage(SimpleMarker);
+        //});
+
+        //function initPage(SimpleMarker) {
+
+        //    //创建SimpleMarker实例
+        //    new SimpleMarker({
+        //        //前景文字
+        //        iconLabel: '广州南站',
+        //        //图标主题
+        //        iconTheme: 'default',
+        //        //背景图标样式
+        //        iconStyle: 'red',
+        //        //...其他Marker选项...，不包括content
+        //        map: theMap,
+        //        position: [113.275824, 22.994826]
+        //    });
+
+
+        //}
+    </script>
+</body>
+</html>
