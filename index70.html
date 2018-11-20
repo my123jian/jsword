@@ -147,26 +147,18 @@
                         thePoints = [];
                     }
                     console.log("绘图结束！");
-                    //var polygon = new AMap.Polygon({
-                    //    map: window.theMap,
-                    //    strokeWeight: 1,
-                    //    borderWeight: 200, // 线条宽度，默认为 1
-                    //    path: thePaths,
-                    //    strokeOpacity: 1,
-                    //    zIndex: 1,
-                    //    fillOpacity: 0.5,
-                    //    fillColor: '#0f0c21',
-                    //    strokeColor: 'blue'
-                    //});
+
                     showMark();
                     var theValue = 1;
-                    var thePitchTimer = window.setInterval(function () {
-                        console.log("角度:"+theValue);
+                    thePitchTimer = window.setInterval(function (me) {
+                        console.log("角度:" + theValue);
                         if (theValue > 45) {
-                            //window.clearInterval(thePitchTimer);
+                            window.clearInterval(thePitchTimer);
                             return;
                         }
-                        theMap.setPitch(theValue);
+                        else {
+                            theMap.setPitch(theValue);
+                        }
                         theValue = theValue + 1;
                     }, 10);
 
@@ -194,32 +186,61 @@
 
         }
 
-        function showMark() {
+        var theMarks = [];
+        var theMaxLevel = 18;
+        function showMark(theType) {
+            theMap.remove(theMarks);
             var thePoints = {
                 "广州南站": { "latitude": 22.9874720000, "longitude": 113.2685860000 },
                 // "深圳火车站": { "latitude": 22.5319900000, "longitude": 114.1176800000 },
-                "深圳北站": { "latitude": 22.6097250000, "longitude": 114.0291130000 },
+               /// "深圳北站": { "latitude": 22.6097250000, "longitude": 114.0291130000 },
                 //"广州东站": { "latitude": 23.1505660000, "longitude": 113.3249000000 },
                 //"广州火车站": { "latitude": 23.1494150000, "longitude": 113.2572910000 },
                 //"广州北站": { "latitude": 23.3774050000, "longitude": 113.2037940000 },
                 //"深圳西站": { "latitude": 22.5275730000, "longitude": 113.9073060000 },
                 //"深圳东站": { "latitude": 22.6019860000, "longitude": 114.1199340000 },
-                "珠海站": { "latitude": 22.2153960000, "longitude": 113.5496410000 },
-                "白云国际机场": { "latitude": 23.3896270000, "longitude": 113.3076480000 },
-                "宝安国际机场": { "latitude": 22.6333600000, "longitude": 113.8145490000 },
+                ///  "珠海站": { "latitude": 22.2153960000, "longitude": 113.5496410000 },
+                ///"白云国际机场": { "latitude": 23.3896270000, "longitude": 113.3076480000 },
+                /// "宝安国际机场": { "latitude": 22.6333600000, "longitude": 113.8145490000 },
                 //"珠海金湾国际机场": { "latitude": 22.0057560000, "longitude": 113.3819450000 },
                 //"揭阳潮汕国际机场": { "latitude": 23.5463610000, "longitude": 116.5092740000 }
             };
 
             for (var name in thePoints) {
                 var theItem = thePoints[name];
+                if (theType == "火车") {
+                    if (name == "") {
+
+                    }
+                }
                 var marker = new AMap.Marker({
 
                     position: new AMap.LngLat(theItem.longitude, theItem.latitude),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
                     title: name
                 });
+                marker.on('click', function (arg) {
+                    //var thelng = arg.lnglat;
+                    var thelng = new AMap.LngLat(113.2685860000, 22.9874720000);
+                    //{ "latitude": , "longitude":  }
+                    MoveToPoint(thelng, theMaxLevel);
+                })
+                theMarks.push(marker);
                 theMap.add(marker);
             }
+        }
+
+        function MoveToPoint(lntlat, maxZoom) {
+            var theZoom = theMap.getZoom();
+            thePitchTimer = window.setInterval(function () {
+                //console.log("角度:" + theValue);
+                if (theZoom > maxZoom) {
+                    window.clearInterval(thePitchTimer);
+                    return;
+                }
+                //theMap.setCenter(lntlat);
+                //theMap.setZoom(theZoom++);
+                theMap.setZoomAndCenter (theZoom++,lntlat);
+            }, 10);
         }
 
         // 将创建的点标记添加到已有的地图实例：
