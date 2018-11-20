@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
@@ -80,17 +80,17 @@
 
                     var theBound = bounds[i];
                     var polygon = {};
-                    var polygon = new AMap.Polygon({
-                        map: window.theMap,
-                        strokeWeight: 1,
-                        borderWeight: 200, // 线条宽度，默认为 1
-                        path: theBound,
-                        strokeOpacity: 1,
-                        zIndex: 1,
-                        fillOpacity: 0.5,
-                        fillColor: '#0f0c21',
-                        strokeColor: 'blue'
-                    });
+                    //var polygon = new AMap.Polygon({
+                    //    map: window.theMap,
+                    //    strokeWeight: 1,
+                    //    borderWeight: 200, // 线条宽度，默认为 1
+                    //    path: theBound,
+                    //    strokeOpacity: 1,
+                    //    zIndex: 1,
+                    //    fillOpacity: 0.5,
+                    //    fillColor: '#0f0c21',
+                    //    strokeColor: 'blue'
+                    //});
 
                     if (theBound.length >= 10000) {
                         theBigBounds = theBound;
@@ -98,7 +98,7 @@
                     //  polygons.push(polygon);
 
                 }
-               showLine(theBigBounds);
+                showLine(theBigBounds);
 
             })
         });
@@ -118,29 +118,46 @@
             var thePoints = [];
             thePoints.push(thePaths[0]);
             console.log("开始执行");
-            
+
             var theTimer = window.setInterval(function () {
                 console.log(theIndex);
                 thePoints.push(thePaths[theIndex]);
                 theIndex++;
-                if (theIndex<thePaths.length){
-                    thePoints.push(thePaths[theIndex]);
-                    theIndex++;
-                }           
+                for (var j = 0; j < 250;j++){
+                    if (theIndex<thePaths.length){
+                        thePoints.push(thePaths[theIndex]);
+                        theIndex++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+
                 if (theIndex >= thePaths.length) {
-                    debugger;
+                   // debugger;
                     window.clearInterval(theTimer);
                     if (thePoints.length > 0) {
                         var polyline = new AMap.Polyline({
                             path: thePoints,
                             map: window.theMap,
                             borderWeight: 2, // 线条宽度，默认为 1
-                            strokeColor: 'red'//, // 线条颜色
+                            strokeColor: 'white'//, // 线条颜色
                             //lineJoin: 'round' // 折线拐点连接处样式
                         });
                         thePoints = [];
                     }
                     console.log("绘图结束！");
+                    var polygon = new AMap.Polygon({
+                        map: window.theMap,
+                        strokeWeight: 1,
+                        borderWeight: 200, // 线条宽度，默认为 1
+                        path: thePaths,
+                        strokeOpacity: 1,
+                        zIndex: 1,
+                        fillOpacity: 0.5,
+                        fillColor: '#0f0c21',
+                        strokeColor: 'blue'
+                    });
                     return;
                 }
                 if (thePoints.length > 10) {
@@ -149,19 +166,19 @@
                         path: thePoints,
                         map: window.theMap,
                         borderWeight: 2, // 线条宽度，默认为 1
-                        strokeColor: 'red'//, // 线条颜色
+                        strokeColor: 'white'//, // 线条颜色
                         //lineJoin: 'round' // 折线拐点连接处样式
                     });
                     var theLastPoint = thePoints[thePoints.length - 1];
                     thePoints = [];
                     thePoints.push(theLastPoint);
-                    
+
                     console.log("开始绘制线！");
                 }
 
             }, 1);
 
-        
+
 
         }
 
