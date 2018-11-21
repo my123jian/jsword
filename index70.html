@@ -19,20 +19,24 @@
 <body>
     <div id="container" class="container">
     </div>
-
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://webapi.amap.com/maps?v=1.4.8&key=b70cedb6efd4b9dac0bebb4c67230db6"></script>
+    <script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <script src="https://webapi.amap.com/loca?v=1.2.0&key=b70cedb6efd4b9dac0bebb4c67230db6"></script>
     <script type="text/javascript">
         var satellite = new AMap.TileLayer.Satellite();
         //var roadNet = new AMap.TileLayer.RoadNet();
+        var traffic = new AMap.TileLayer.Traffic({
+            'autoRefresh': true,     //是否自动刷新，默认为false
+            'interval': 180,         //刷新间隔，默认180s
+        });
         var building = new AMap.Buildings({
             zooms: [16, 18],
             zIndex: 10,
             heightFactor: 2//2倍于默认高度，3D下有效
-        })
+        });
         var theMap = new AMap.Map('container', {
-
-            pitch: -90,
+            pitch: 0,
             viewMode: '3D',// 地图模式
             center: [113.275824, 22.994826],
             features: ['bg', 'building'],
@@ -42,6 +46,13 @@
                     building
                     //roadNet
             ]
+        });
+       
+     
+
+
+        theMap.on('click', function (e) {
+            console.log(e);
         });
         var theMaxZoom = 18;
         var theCurrentZoom = 1;
@@ -103,10 +114,10 @@
             })
         });
 
-        var marker = new AMap.Marker({
-            position: new AMap.LngLat(113.275824, 22.994826),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-            title: '广州南站'
-        });
+        //var marker = new AMap.Marker({
+        //    position: new AMap.LngLat(113.275824, 22.994826),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+        //    title: '广州南站'
+        //});
 
         function showLine(thePaths) {
             console.log("开始绘制线！");
@@ -148,7 +159,7 @@
                     }
                     console.log("绘图结束！");
 
-                    showMark();
+                    ShowMark();
                     var theValue = 1;
                     thePitchTimer = window.setInterval(function (me) {
                         console.log("角度:" + theValue);
@@ -188,39 +199,40 @@
 
         var theMarks = [];
         var theMaxLevel = 18;
-        function showMark(theType) {
+
+        //显示标点内容
+        function ShowMark(theType) {
+            //先清除标点
             theMap.remove(theMarks);
             var thePoints = {
-                "广州南站": { "latitude": 22.9874720000, "longitude": 113.2685860000 },
+                "广州南站": { "latitude": 22.9874720000, "longitude": 113.2685860000, "type": "铁路" },
                 // "深圳火车站": { "latitude": 22.5319900000, "longitude": 114.1176800000 },
-               /// "深圳北站": { "latitude": 22.6097250000, "longitude": 114.0291130000 },
+                "深圳北站": { "latitude": 22.6097250000, "longitude": 114.0291130000, "type": "铁路" },
                 //"广州东站": { "latitude": 23.1505660000, "longitude": 113.3249000000 },
                 //"广州火车站": { "latitude": 23.1494150000, "longitude": 113.2572910000 },
                 //"广州北站": { "latitude": 23.3774050000, "longitude": 113.2037940000 },
                 //"深圳西站": { "latitude": 22.5275730000, "longitude": 113.9073060000 },
                 //"深圳东站": { "latitude": 22.6019860000, "longitude": 114.1199340000 },
-                ///  "珠海站": { "latitude": 22.2153960000, "longitude": 113.5496410000 },
-                ///"白云国际机场": { "latitude": 23.3896270000, "longitude": 113.3076480000 },
-                /// "宝安国际机场": { "latitude": 22.6333600000, "longitude": 113.8145490000 },
+                "珠海站": { "latitude": 22.2153960000, "longitude": 113.5496410000, "type": "铁路" },
+                //"白云国际机场": { "latitude": 23.3896270000, "longitude": 113.3076480000 },
+                "白云国际机场": { "latitude": 23.396544, "longitude": 113.306199, "type": "民航" },
+                //"宝安国际机场": { "latitude": 22.6333600000, "longitude": 113.8145490000 },
+                "宝安国际机场": { "latitude": 22.62506, "longitude": 113.812809, "type": "民航" },
                 //"珠海金湾国际机场": { "latitude": 22.0057560000, "longitude": 113.3819450000 },
                 //"揭阳潮汕国际机场": { "latitude": 23.5463610000, "longitude": 116.5092740000 }
             };
-
             for (var name in thePoints) {
                 var theItem = thePoints[name];
-                if (theType == "火车") {
-                    if (name == "") {
-
-                    }
+                if (theType && theType != theItem.type) {
+                    continue;
                 }
                 var marker = new AMap.Marker({
-
-                    position: new AMap.LngLat(theItem.longitude, theItem.latitude),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                    position: new AMap.LngLat(theItem.longitude, theItem.latitude),// 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
                     title: name
                 });
                 marker.on('click', function (arg) {
                     //var thelng = arg.lnglat;
-                    var thelng = new AMap.LngLat(113.2685860000, 22.9874720000);
+                    var thelng = arg.target.getPosition();// new AMap.LngLat(113.2685860000, 22.9874720000);
                     //{ "latitude": , "longitude":  }
                     MoveToPoint(thelng, theMaxLevel);
                 })
@@ -229,20 +241,103 @@
             }
         }
 
+        //开始导航到指定点
         function MoveToPoint(lntlat, maxZoom) {
+            console.log("开始导航到指定点!");
             var theZoom = theMap.getZoom();
             thePitchTimer = window.setInterval(function () {
-                //console.log("角度:" + theValue);
                 if (theZoom > maxZoom) {
                     window.clearInterval(thePitchTimer);
+                    console.log("结束导航到指定点!");
                     return;
                 }
-                //theMap.setCenter(lntlat);
-                //theMap.setZoom(theZoom++);
-                theMap.setZoomAndCenter (theZoom++,lntlat);
+                theMap.setZoomAndCenter(theZoom++, lntlat);
+            }, 10);
+        }
+        //结束导航到指定点
+        function ReturnDefualt(defaultZoom, lntlat) {
+            console.log("开始导航到该蓝图!");
+            var theZoom = theMap.getZoom();
+            defaultZoom = defaultZoom || 7;
+            var lntlat = lntlat || new AMap.LngLat(113.275824, 22.994826)
+            thePitchTimer = window.setInterval(function () {
+                if (theZoom < defaultZoom || theZoom <= 1) {
+                    window.clearInterval(thePitchTimer);
+                    console.log("结束导航到该蓝图!");
+                    return;
+                }
+                theMap.setZoomAndCenter(theZoom--, lntlat);
             }, 10);
         }
 
+        function SwitchView(viewName) {
+            ReturnDefualt();
+            ShowMark(viewName);
+            theMap.remove(traffic);
+            if (viewName == "公路") {
+                theMap.add(traffic);
+            }
+        }
+
+        function TestView() {
+            // 传入 AMap.Map 实例
+            var map = Loca.create(theMap);
+            $.get('traffic_110000.csv', function (csv) {
+                var layer = Loca.visualLayer({
+                    container: map,
+                    type: 'point',
+                    shape: 'circle'
+                });
+
+                layer.setData(csv, {
+                    lnglat: function (obj) {
+                        var value = obj.value;
+                        return [value['lng'], value['lat']];
+                    },
+                    type: 'csv'
+                });
+
+                layer.setOptions({
+                    style: {
+                        // 根据车辆类型设定不同半径
+                        radius: function (obj) {
+                            var value = obj.value;
+                            switch (parseInt(value.type)) {
+                                case 3:
+                                    return 1;
+                                case 4:
+                                    return 1.2;
+                                case 41:
+                                    return 1.4;
+                                case 5:
+                                    return 1.2;
+                                default:
+                                    return 1;
+                            }
+                        },
+                        // 根据车辆类型设定不同填充颜色
+                        color: function (obj) {
+                            var value = obj.value;
+                            switch (parseInt(value.type)) {
+                                case 3:
+                                    return colors[0];
+                                case 4:
+                                    return colors[1];
+                                case 41:
+                                    return colors[2];
+                                case 5:
+                                    return colors[3];
+                                default:
+                                    return colors[4];
+                            }
+                        },
+                        opacity: 0.8
+                    }
+                });
+
+                layer.render();
+            });
+        }
         // 将创建的点标记添加到已有的地图实例：
 
 
