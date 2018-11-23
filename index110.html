@@ -108,6 +108,7 @@
                 theMap.add(roadNet);
                 theMap.add(building);
                 theMap.setPitch(45);
+                theInnerLayer&&theInnerLayer.setzIndex(1000);
                 //theMap.add(satellite);
                 //theMap.setMapStyle("normal");
                
@@ -144,6 +145,7 @@
                 console.log("找到室内图");
                 theLayer.hideFloorBar();
                 theInnerLayer = theLayer;
+                
                 theInnerLayer.off('complete');
                 //theInnerLayer.off('floor_complete');
                 theInnerLayer.on('click', function () {
